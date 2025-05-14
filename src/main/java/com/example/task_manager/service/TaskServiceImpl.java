@@ -1,9 +1,12 @@
 package com.example.task_manager.service;
 
 import com.example.task_manager.model.Task;
+import com.example.task_manager.model.User;
 import com.example.task_manager.repository.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
     @Override
     public Task createTask(Task task) {
@@ -31,7 +35,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task updateTask(Long id, Task taskDetails) {
+    public Task updateTask(Long id, Task taskDetails, String userEmail) {
+        User user = userService.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Task task = getTaskById(id);
+
+        if (!task.getUser().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You are not authorized to update this task");
+        }
+
         Task current = getTaskById(id);
         current.setTitle(taskDetails.getTitle());
         current.setDescription(taskDetails.getDescription());
@@ -42,7 +55,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(Long id) {
-        taskRepository.deleteById(id);
+    public void deleteTask(Long taskId, User user) {
+        Task task = getTaskById(taskId);
+        if (!task.getUser().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You do not have permission to delete this task.");
+        }
+        taskRepository.deleteById(taskId);
     }
 }

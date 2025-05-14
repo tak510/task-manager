@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<h1 id="welcome-msg">Welcome!</h1>
+<button onclick="logout()">Logout</button>
+
+<h2>Your Tasks</h2>
+<ul id="task-list"></ul>
+
+<h3>Add Task</h3>
+<form id="task-form">
+    <input type="text" id="task-title" placeholder="Task title" required />
+    <button type="submit">Add Task</button>
+</form>
+
+<script>
+    // Retrieve JWT from localStorage
+    const jwt = localStorage.getItem("jwt");
+
+    if (!jwt) {
+      alert("You are not logged in.");
+      window.location.href = "auth.html";
+    }
+
+    // Decode JWT (Optional)
+    function parseJwt(token) {
+      try {
+        return JSON.parse(atob(token.split('.')[1]));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const payload = parseJwt(jwt);
+    document.getElementById("welcome-msg").textContent = `Welcome, ${payload?.sub || "User"}`;
+
+    // Fetch and display tasks
+    function loadTasks() {
+      fetch("http://localhost:8080/api/tasks", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${jwt}`,
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch tasks.");
+        return res.json();
+      })
+      .then(tasks => {
+        const taskList = document.getElementById("task-list");
+        taskList.innerHTML = "";
+        tasks.forEach(task => {
+          const li = document.createElement("li");
+          li.textContent = task.title;
+          taskList.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Could not load tasks. Please try again.");
+      });
+    }
+
+    // Call loadTasks on page load
+    loadTasks();
+
+    // Submit new task
+    document.getElementById("task-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const title = document.getElementById("task-title").value.trim();
+
+      if (!title) return alert("Task title cannot be empty.");
+
+      fetch("http://localhost:8080/api/tasks", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${jwt}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ title })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to add task.");
+        return res.json();
+      })
+      .then(() => {
+        alert("Task added!");
+        loadTasks(); // Reload task list instead of full reload
+        document.getElementById("task-form").reset(); // Clear input
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Could not add task. Please try again.");
+      });
+    });
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem("jwt");
+      window.location.href = "auth.html";
+    }
+
+    // Expose logout to window
+    window.logout = logout;
+</script>
+</body>
+</html>

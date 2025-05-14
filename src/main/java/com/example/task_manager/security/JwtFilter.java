@@ -24,7 +24,6 @@ public class JwtFilter extends OncePerRequestFilter {
     public JwtFilter(JWTUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
-        System.out.println(">>> JwtFilter initialized");
     }
 
     @Override

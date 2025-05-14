@@ -1,5 +1,6 @@
 package com.example.task_manager.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,9 @@ public class Task {
     private LocalDateTime dueDate;
     private boolean completed;
     private String category;
+    private LocalDateTime reminderTime;
+    @JsonIgnore
+    private boolean reminderSent = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

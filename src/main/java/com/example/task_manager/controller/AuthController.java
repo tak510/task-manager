@@ -8,6 +8,7 @@ import com.example.task_manager.service.UserDetailsServiceImpl;
 import com.example.task_manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,16 +37,29 @@ public class AuthController {
     private UserDetailsServiceImpl userDetailsService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
-        Optional<User> existing = userService.findByEmail(user.getEmail());
+    public ResponseEntity<Map<String, String>> register(@RequestBody AuthRequest request) {
+        Optional<User> existing = userService.findByEmail(request.getEmail());
+
+        Map<String, String> response = new HashMap<>();
         if (existing.isPresent()) {
-            return ResponseEntity.badRequest().body("Email already in use.");
+            response.put("message", "Email already in use.");
+            return ResponseEntity.badRequest().body(response);
         }
-        userService.registerUser(user);
-        return ResponseEntity.ok("User registered successfully.");
+
+        // Create a new User object from the request
+        User newUser = new User();
+        newUser.setEmail(request.getEmail());
+        newUser.setPassword(request.getPassword());
+
+        userService.registerUser(newUser);
+
+        response.put("message", "User registration successful");
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/login")
+
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
             authenticationManager.authenticate(
