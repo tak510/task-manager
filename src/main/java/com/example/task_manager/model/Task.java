@@ -28,7 +28,7 @@ public class Task {
     private boolean reminderSent = false;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 }

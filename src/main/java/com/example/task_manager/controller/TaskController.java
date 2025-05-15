@@ -22,8 +22,21 @@ public class TaskController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<Task> createTask(@RequestBody Task task, Principal principal) {
+        String email = principal.getName();
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        task.setUser(user); // Assuming Task has a `User` field
         return ResponseEntity.ok(taskService.createTask(task));
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<Task>> getAllTasksForCurrentUser(Principal principal) {
+        String email = principal.getName();
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return ResponseEntity.ok(taskService.getTasksByUserId(user.getId()));
     }
 
     @GetMapping("/user/{userId}")

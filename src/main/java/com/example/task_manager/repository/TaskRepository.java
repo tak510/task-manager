@@ -17,5 +17,4 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByReminderTimeBeforeAndReminderSentFalse(LocalDateTime time);
     @Query("SELECT t FROM Task t WHERE t.reminderTime <= :now AND t.reminderSent = false AND t.reminderTime IS NOT NULL")
     List<Task> findPendingReminders(@Param("now") LocalDateTime now);
-
 }
