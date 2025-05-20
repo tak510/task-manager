@@ -1,0 +1,128 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f9f9f9;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #007bff;
+  color: white;
+}
+
+#logout-btn {
+  background-color: white;
+  color: #007bff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dashboard-container {
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.tasks-section,
+.add-task-section {
+  margin-bottom: 40px;
+}
+
+form input,
+form select,
+form button {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-list li {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 15px;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.task-list li .complete-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #28a745;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.task-list li small {
+  color: #666;
+  display: block;
+  margin-top: 5px;
+}
+
+/* Add this for aligning the task input fields in a row */
+.task-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.task-form-row > * {
+  flex: 1 1 48%; /* Allows 2 elements per row on wider screens */
+  min-width: 200px;
+}
+
+@media (max-width: 600px) {
+  .task-form-row > * {
+    flex: 1 1 100%;
+  }
+}
+
+/* Fix spacing inside task items */
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.task-meta small {
+  margin-right: 10px;
+}
+
+/* Apply color styles to the small labels */
+.due-label {
+  color: red;
+}
+
+.category-label {
+  color: goldenrod;
+}
+
+.desc-label {
+  color: #007bff;
+}
