@@ -5,17 +5,35 @@ const jwt = localStorage.getItem("jwt");
     window.location.href = "auth.html";
   }
 
-  // Decode and greet user
-  function parseJwt(token) {
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch (e) {
-      return null;
-    }
+  // Function to fetch the user's name from the backend
+  async function fetchUserName() {
+      try {
+          const response = await fetch('/api/user/name', {
+              method: 'GET',
+              headers: {
+                  "Authorization": "Bearer " + jwt
+              }
+          });
+
+          if (!response.ok) {
+              console.error('Failed to fetch user name:', response.status);
+              document.getElementById("welcome-msg").textContent = 'Welcome!'; // Fallback message
+              return null;
+          }
+
+          const name = await response.text();
+          document.getElementById("welcome-msg").textContent = "Welcome, " + name + "!";
+          return name;
+
+      } catch (error) {
+          console.error('Error fetching user name:', error);
+          document.getElementById("welcome-msg").textContent = 'Welcome!'; // Fallback message
+          return null;
+      }
   }
 
-  const payload = parseJwt(jwt);
-  document.getElementById("welcome-msg").textContent = "Welcome, " + (payload?.sub || "User");
+  // Call fetchUserName when the page loads
+  fetchUserName();
 
   // Load tasks
   async function fetchTasks() {

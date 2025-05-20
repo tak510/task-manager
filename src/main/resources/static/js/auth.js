@@ -14,12 +14,14 @@ registerForm.addEventListener("submit", async (e) => {
 
   const email = document.getElementById("reg-email").value.trim();
   const password = document.getElementById("reg-password").value.trim();
+  const firstName = document.getElementById("reg-firstname").value.trim();
+  const lastName = document.getElementById("reg-lastname").value.trim();
 
   try {
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, firstName, lastName })
     });
 
     const data = await response.json();

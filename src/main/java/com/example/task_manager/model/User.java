@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users") // optional, but common
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,9 @@ public class User {
 
     private String email;
 
-    private String fullName;
+    private String firstName;
+
+    private String lastName;
 
     private String password;
 }

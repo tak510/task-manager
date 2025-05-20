@@ -26,7 +26,7 @@ public class TaskController {
         String email = principal.getName();
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        task.setUser(user); // Assuming Task has a `User` field
+        task.setUser(user);
         return ResponseEntity.ok(taskService.createTask(task));
     }
 
