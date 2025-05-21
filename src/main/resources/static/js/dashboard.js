@@ -83,6 +83,11 @@ document.getElementById("task-form").addEventListener("submit", async function (
     return;
   }
 
+  if(Date.parse(dueDate) <= Date.now()) {
+    alert("Due date must be in the future!");
+    return;
+  }
+
   try {
     const res = await fetch("/api/tasks", {
       method: "POST",
