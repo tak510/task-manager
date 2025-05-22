@@ -13,10 +13,7 @@
 </header>
 
 <main class="dashboard-container">
-    <section class="tasks-section">
-        <h2>Your Tasks</h2>
-        <ul id="task-list" class="task-list"></ul>
-    </section>
+    <div id="task-sections"></div>
 
     <section class="add-task-section">
         <h3>Add Task</h3>
@@ -36,6 +33,16 @@
             <button type="submit">Add Task</button>
         </form>
     </section>
+
+    <div id="delete-confirm-modal">
+        <div class="modal-content">
+            <p>Are you sure you want to delete this task?</p>
+            <div class="modal-buttons">
+                <button id="confirm-delete" class="confirm-btn">Yes</button>
+                <button id="cancel-delete" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script src="js/dashboard.js"></script>

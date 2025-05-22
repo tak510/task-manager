@@ -21,7 +21,7 @@ public class Task {
     private String title;
     private String description;
     private LocalDateTime dueDate;
-    private boolean completed;
+    private boolean completed = false;
     private String category;
     private LocalDateTime reminderTime;
     @JsonIgnore

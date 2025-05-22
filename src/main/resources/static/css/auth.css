@@ -67,7 +67,7 @@ button {
 }
 
 button:hover {
-  background-color: rgb(0, 0, 70);
+  background-color: rgb(20,20, 150);
 }
 
 .register-link {
@@ -127,11 +127,11 @@ button:hover {
 }
 
 .card form {
-  text-align: center;          /* center the labels/inputs */
+  text-align: center;
 }
 
 .card input {
-  max-width: 280px;            /* keeps them from stretching edge-to-edge */
-  margin: .5rem auto;          /* centers the actual box */
+  max-width: 280px;
+  margin: .5rem auto;
   display: block;
 }
