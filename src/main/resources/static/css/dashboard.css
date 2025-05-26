@@ -193,9 +193,29 @@ form button:hover {
 
 .task-edit button {
   flex: 0 0 auto;
-  margin: 0;
+  margin: 10px;
   padding: 4px 8px;
   font-size: 0.8rem;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+}
+
+.task-edit .save-edit-btn {
+  background-color: #28a745;
+}
+
+.task-edit .save-edit-btn:hover {
+  background-color: #218838;
+}
+
+.task-edit .cancel-edit-btn {
+  background-color: #dc3545;
+}
+
+.task-edit .cancel-edit-btn:hover {
+  background-color: #c82333;
 }
 
 @media (max-width: 480px) {
@@ -278,4 +298,12 @@ form button:hover {
 #delete-confirm-modal .cancel-btn {
   background-color: #6c757d;
   color: white;
+}
+
+#delete-confirm-modal .cancel-btn: hover {
+  background-color: #4f565c;
+}
+
+#delete-confirm-modal .confirm-btn: hover {
+  background-color: #bd2b39;
 }
