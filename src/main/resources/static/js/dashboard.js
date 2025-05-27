@@ -168,7 +168,7 @@ async function fetchTasks() {
               "Content-Type": "application/json",
               "Authorization": "Bearer " + jwt
             },
-            body: JSON.stringify({ completed: !task.completed })
+            body: JSON.stringify({ ...task, completed: !task.completed })
           });
 
           if (!res.ok) throw new Error("Failed to toggle status");
