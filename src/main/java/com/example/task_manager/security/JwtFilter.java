@@ -1,7 +1,6 @@
 package com.example.task_manager.security;
 
 import com.example.task_manager.service.UserDetailsServiceImpl;
-import com.example.task_manager.security.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

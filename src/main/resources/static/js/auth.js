@@ -1,6 +1,7 @@
 const registerForm = document.getElementById("register-form");
 const loginForm = document.getElementById("login-form");
 const message = document.getElementById("message");
+const rmessage = document.getElementById("reg-message");
 
 // Helper: show messages
 function showMessage(text, success = false) {
@@ -17,6 +18,11 @@ registerForm.addEventListener("submit", async (e) => {
   const firstName = document.getElementById("reg-firstname").value.trim();
   const lastName = document.getElementById("reg-lastname").value.trim();
 
+  if(password.length <= 10 || !/[A-Z]/.test(password) || !/[^a-zA-Z0-9]/.test(password)) {
+    alert("Invalid password. Password must contain 10 characters, including 1 capital letter, and 1 symbol.")
+  }
+
+
   try {
     const response = await fetch("/api/auth/register", {
       method: "POST",
@@ -30,7 +36,8 @@ registerForm.addEventListener("submit", async (e) => {
       showMessage("Registration successful! You can now log in.", true);
       closeRegisterModal();
     } else {
-      showMessage(data.message || "Registration failed.");
+      rmessage.innerHTML = `<p style='color:red;'><b>${data.message}</b></p>`;
+      showMessage("Registration failed.");
     }
   } catch (err) {
     showMessage("An error occurred during registration.");

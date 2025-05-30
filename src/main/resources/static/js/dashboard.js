@@ -137,6 +137,11 @@ async function fetchTasks() {
           return;
         }
 
+        if(updatedTask.title.length == 0) {
+          alert("Must have a title.");
+          return;
+        }
+
         if (updatedTask.dueDate && new Date(updatedTask.dueDate).getTime() <= Date.now()) {
           alert("Due date must be in the future!");
           return;

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -43,6 +44,28 @@ public class AuthController {
         Map<String, String> response = new HashMap<>();
         if (existing.isPresent()) {
             response.put("message", "Email already in use.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // Password Validation
+        String password = request.getPassword();
+
+        if (password == null || password.length() < 10) {
+            response.put("message", "Password must be at least 10 characters long.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // Check for at least one uppercase letter
+        Pattern upperCasePattern = Pattern.compile(".*[A-Z].*");
+        if (!upperCasePattern.matcher(password).matches()) {
+            response.put("message", "Password must contain at least one uppercase letter.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // Check for at least one symbol
+        Pattern symbolPattern = Pattern.compile(".*[^a-zA-Z0-9].*");
+        if (!symbolPattern.matcher(password).matches()) {
+            response.put("message", "Password must contain at least one symbol.");
             return ResponseEntity.badRequest().body(response);
         }
 

@@ -3,6 +3,7 @@ package com.example.task_manager.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,8 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
-    private final String SECRET_KEY = "4D77F5C9152A4B23D6FECF8E3A5B9082C6D3970EDE77593B5F2C83A8007C1740"; // Use env variable in real apps
+    @Value("${jwt.secret}") // Inject the secret from properties
+    private String SECRET_KEY;
 
     public String generateToken(String username) {
         return Jwts.builder()

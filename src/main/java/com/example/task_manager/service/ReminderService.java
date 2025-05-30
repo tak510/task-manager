@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
+/* Reminder service will be further implemented at a later date. For now, the basics are coded up here.
+Rather than system print messages, will try to send email reminders instead.
+ */
 @Service
 public class ReminderService {
 
@@ -17,13 +20,12 @@ public class ReminderService {
         this.taskRepository = taskRepository;
     }
 
-    @Scheduled(fixedRate = 60000) // every 60 seconds
+    // Commented out for now @Scheduled(fixedRate = 60000) // every 60 seconds
     public void checkReminders() {
         LocalDateTime now = LocalDateTime.now();
         List<Task> tasksToRemind = taskRepository.findByReminderTimeBeforeAndReminderSentFalse(now);
 
         for (Task task : tasksToRemind) {
-            // For now, just log the reminder
             System.out.println("Reminder: Task \"" + task.getTitle() + "\" is due on " + task.getDueDate());
 
             // Mark as sent

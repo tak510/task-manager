@@ -6,6 +6,7 @@ import com.example.task_manager.service.TaskService;
 import com.example.task_manager.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +40,18 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTasksByUserId(user.getId()));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Task>> getTasksByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(taskService.getTasksByUserId(userId));
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
-        return ResponseEntity.ok(taskService.getTaskById(id));
+    public ResponseEntity<Task> getTaskById(@PathVariable Long id, Principal principal) {
+        String email = principal.getName();
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Task task = taskService.getTaskById(id);
+        if (!task.getUser().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You are not authorized to view this task.");
+        }
+
+        return ResponseEntity.ok(task);
     }
 
     @PutMapping("/{id}")
